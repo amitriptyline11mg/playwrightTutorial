@@ -23,3 +23,4 @@ jobs:
         name: playwright-report
         path: playwright-report/
         retention-days: 30
+git add .github/workflows/playwright.yml
