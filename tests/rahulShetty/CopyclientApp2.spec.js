@@ -4,49 +4,33 @@ import { test, expect } from '@playwright/test';
 
 test('Rshetty', async ({ page }) => {
   await page.goto('https://rahulshettyacademy.com/client/');
-  await page.locator('#userEmail').fill('butterbeer@gmail.com');
-  await page.locator('#userPassword').fill('P@ssw0rd!001');
-  await page.click('#login')
+  await page.getByPlaceholder('email@example.com').fill('butterbeer@gmail.com');
+  await page.getByPlaceholder('enter your passsword').fill('P@ssw0rd!001');
+  await page.getByRole('button', { name: 'Login' }).click();
 
   const productIwant = 'ADIDAS ORIGINAL'
+
   await page.locator('.card-body b').last().waitFor();
-  const allProducts = page.locator('.card-body');
-  const count = await allProducts.count()
 
-  for (let i = 0; i < count - 1; i++) {
 
-    if (await allProducts.nth(i).locator('b').textContent() === productIwant) {
-      // Add to cart
-      await allProducts.nth(i).locator('text =" Add To Cart"').click()
-      break;
-    }
-  }
+  await page.locator(".card-body").filter({ hasText: "ADIDAS ORIGINAL" })
+    .getByRole("button", { name: "Add to Cart" }).click();
 
-  const addToCartBtn = page.locator('[routerlink*="cart"]');
-  await addToCartBtn.click();
+  await page.getByRole("listitem").getByRole('button', { name: "Cart" }).click();
+
   page.locator("div li").first().waitFor();
 
   await page.locator("h3:has-text('ADIDAS ORIGINAL')").isVisible();
   expect(page.locator("h3:has-text('ADIDAS ORIGINAL')").isVisible()).toBeTruthy();
   console.log("Product was added");
-  await page.locator('text=Checkout').click()
 
-  await page.locator('[placeholder*="Country"]').pressSequentially('Ind');
+  await page.getByRole("button", { name: "Checkout" }).click();
 
-  const dropdown = page.locator('.ta-results')
-  await dropdown.waitFor();  // It will wait for dropdown to load
+  await page.getByPlaceholder("Select Country").pressSequentially("ind");
 
-  const optionsCount = await dropdown.locator('button').count()
+  await page.getByRole("button", { name: "India" }).nth(1).click();
 
-  for(let i=0; i<optionsCount; i++){
-    const Btntext = await dropdown.locator('button').nth(i).textContent();
 
-    if(Btntext === ' India'){
-      await dropdown.locator("button").nth(i).click()
-      break;
-    }
-  }
-  
   // Fill the other details
   await page.locator('[value="4542 9931 9292 2293"]').fill('"0001 0002 0003 0004"]')
   await page.locator('div.title:has-text("CVV Code") + input.input.txt').fill('345');
@@ -68,14 +52,18 @@ test('Rshetty', async ({ page }) => {
   await page.locator("tbody").waitFor();
   const rows = page.locator("tbody tr");
 
-  for (let i=0; i<await rows.count(); i++){
+  for (let i = 0; i < await rows.count(); i++) {
     // go to the first(nth) row, locate the head
     const currentOrder = await rows.nth(i).locator('th').textContent();
 
-    if(orderID.includes(currentOrder)){
-        await rows.nth(i).locator('button').first().click()
+    if (orderID && currentOrder && orderID.includes(currentOrder)) {
+      await rows.nth(i).locator('button').first().click()
     }
   }
+
+  await page.getByText("PLACE ORDER").click();
+
+  await expect(page.getByText("Thankyou for the order.")).toBeVisible();
 
 
 
