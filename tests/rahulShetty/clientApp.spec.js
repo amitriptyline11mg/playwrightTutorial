@@ -3,13 +3,14 @@ import { test, expect } from '@playwright/test';
 
 
 test('Rshetty', async ({ page }) => {
+  const productIwant = 'ADIDAS ORIGINAL'
   await page.goto('https://rahulshettyacademy.com/client/');
   await page.locator('#userEmail').fill('butterbeer@gmail.com');
   await page.locator('#userPassword').fill('P@ssw0rd!001');
   await page.click('#login')
-
-  const productIwant = 'ADIDAS ORIGINAL'
   await page.locator('.card-body b').last().waitFor();
+
+  
   const allProducts = page.locator('.card-body');
   const count = await allProducts.count()
 
