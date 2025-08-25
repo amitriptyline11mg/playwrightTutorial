@@ -49,7 +49,7 @@ test('Rshetty', async ({ page }) => {
     }
   }
   
-  // Fill the other details
+  // Fill the other details dd
   await page.locator('[value="4542 9931 9292 2293"]').fill('"0001 0002 0003 0004"]')
   await page.locator('div.title:has-text("CVV Code") + input.input.txt').fill('345');
   await page.locator('div.title:has-text("Name on Card ") + input.input.txt').fill('butter Beer');
