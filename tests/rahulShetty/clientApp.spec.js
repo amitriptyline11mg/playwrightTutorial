@@ -20,6 +20,7 @@ test('Rshetty', async ({ page }) => {
       // Add to cart
       await allProducts.nth(i).locator('text =" Add To Cart"').click()
       break;
+      // Abcd
     }
   }
 
