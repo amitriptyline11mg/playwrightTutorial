@@ -70,6 +70,7 @@ test('Rshetty', async ({ page }) => {
   await page.locator("tbody").waitFor();
   const rows = page.locator("tbody tr");
 
+  // HDDKDKB
   for (let i=0; i<await rows.count(); i++){
     // go to the first(nth) row, locate the head
     const currentOrder = await rows.nth(i).locator('th').textContent();
